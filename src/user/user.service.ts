@@ -1,4 +1,75 @@
 import { Injectable } from '@nestjs/common';
+import { LoggerService } from './user.logger.js';
+import { CreateUserDto } from './dto/update-user.dto.js';
+import { UpdateUserDto } from './dto/create-user.dto.js';
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 
 @Injectable()
-export class UserService {}
+export class UserService {
+  constructor(private readonly logger: LoggerService) {}
+  private users: User[] = [
+    {
+      id: 1,
+      name: 'CHinh',
+      email: 'chinh@gmail.com',
+    },
+    {
+      id: 2,
+      name: 'Dinh',
+      email: 'dinh@gmail.com',
+    },
+  ];
+
+  findAllUsers(name: string = '') {
+    this.logger.log('Finding all users');
+
+    return this.users.filter((user) =>
+      user.name.toLocaleLowerCase().includes(name.toLocaleLowerCase()),
+    );
+  }
+
+  findOneUserId(id: number) {
+    this.logger.log(`Finding id ${id}`);
+
+    return this.users.find((user) => user.id === id) ?? null;
+  }
+
+  createUser(dto: CreateUserDto) {
+    this.logger.log('Create user');
+
+    const newUser: User = {
+      id: this.users.length + 1,
+      email: '',
+      ...dto,
+    };
+    this.users.push(newUser);
+
+    return newUser;
+  }
+
+  updateUser(id: number, dto: UpdateUserDto) {
+    this.logger.log(`Update user ${id}`);
+
+    const index = this.users.findIndex((user) => user.id === id);
+    if (index !== -1) return null;
+
+    this.users[index] = { ...this.users[index], ...dto };
+
+    return this.users[index];
+  }
+
+  deleteUser(id: number) {
+    this.logger.log(`Delete user ${id}`);
+    const index = this.users.findIndex((user) => user.id === id);
+    if (index !== -1) return null;
+
+    const [deleted] = this.users.splice(index, 1);
+
+    return deleted;
+  }
+}
