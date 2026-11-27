@@ -30,27 +30,23 @@ export class UserController {
 
   @Get(':id')
   getUserById(@Param('id') id: string) {
-    return { id, name: 'ana' };
+    return this.userService.findOneUserId(Number(id));
   }
 
   @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
-    return { data: createUserDto, message: 'User created successfully' };
+    const newData = this.userService.createUser(createUserDto);
+
+    return newData;
   }
 
   @Put(':id')
   updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return {
-      data: { id, ...updateUserDto },
-      message: 'User updated successfully',
-    };
+    return this.userService.updateUser(Number(id), updateUserDto);
   }
 
   @Delete(':id')
   deleteUser(@Param('id') id: string) {
-    if (id) {
-      return { message: 'deleted successfully' };
-    }
-    return { message: 'Fail' };
+    return this.userService.deleteUser(Number(id));
   }
 }
