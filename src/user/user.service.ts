@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { LoggerService } from './user.logger.js';
-import { CreateUserDto } from './dto/update-user.dto.js';
-import { UpdateUserDto } from './dto/create-user.dto.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 
 export interface User {
   id: number;
@@ -48,7 +48,6 @@ export class UserService {
 
     const newUser: User = {
       id: this.users.length + 1,
-      email: '',
       ...dto,
     };
     this.users.push(newUser);

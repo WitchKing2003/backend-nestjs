@@ -7,10 +7,11 @@ import {
   Post,
   Put,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/update-user.dto.js';
-import { UpdateUserDto } from './dto/create-user.dto.js';
 import { UserService } from './user.service.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 
 //@Get('all)       //GET user/all
 //@Get(':id')      //GET user/:id - dynamic segment
@@ -29,8 +30,8 @@ export class UserController {
   }
 
   @Get(':id')
-  getUserById(@Param('id') id: string) {
-    return this.userService.findOneUserId(Number(id));
+  getUserById(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findOneUserId(id);
   }
 
   @Post()
